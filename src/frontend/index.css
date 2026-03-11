@@ -1,0 +1,94 @@
+@font-face {
+  font-family: "Fraunces";
+  src: url("/assets/fonts/Fraunces.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("/assets/fonts/Outfit.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.75rem;
+    --background: 0.09 0.018 285;
+    --foreground: 0.93 0.01 285;
+    --card: 0.12 0.022 285;
+    --card-foreground: 0.93 0.01 285;
+    --popover: 0.14 0.025 285;
+    --popover-foreground: 0.93 0.01 285;
+    --primary: 0.55 0.22 290;
+    --primary-foreground: 0.98 0.005 285;
+    --secondary: 0.18 0.03 285;
+    --secondary-foreground: 0.93 0.01 285;
+    --muted: 0.18 0.03 285;
+    --muted-foreground: 0.58 0.04 285;
+    --accent: 0.62 0.25 310;
+    --accent-foreground: 0.98 0.005 285;
+    --destructive: 0.60 0.22 25;
+    --destructive-foreground: 0.98 0.005 285;
+    --border: 0.22 0.04 285;
+    --input: 0.20 0.035 285;
+    --ring: 0.55 0.22 290;
+    --chart-1: 0.55 0.22 290;
+    --chart-2: 0.62 0.25 310;
+    --chart-3: 0.65 0.20 270;
+    --chart-4: 0.70 0.18 330;
+    --chart-5: 0.60 0.15 260;
+    --sidebar: 0.11 0.02 285;
+    --sidebar-foreground: 0.93 0.01 285;
+    --sidebar-primary: 0.55 0.22 290;
+    --sidebar-primary-foreground: 0.98 0.005 285;
+    --sidebar-accent: 0.18 0.03 285;
+    --sidebar-accent-foreground: 0.93 0.01 285;
+    --sidebar-border: 0.22 0.04 285;
+    --sidebar-ring: 0.55 0.22 290;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, oklch(0.18 0.06 290 / 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, oklch(0.15 0.05 310 / 0.3) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .vault-glow {
+    box-shadow: 0 0 20px oklch(0.55 0.22 290 / 0.25), 0 0 60px oklch(0.55 0.22 290 / 0.1);
+  }
+  .vault-glow-hover:hover {
+    box-shadow: 0 0 30px oklch(0.55 0.22 290 / 0.45), 0 0 80px oklch(0.55 0.22 290 / 0.2);
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, oklch(0.75 0.18 290), oklch(0.72 0.22 310), oklch(0.68 0.20 330));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .glass {
+    background: oklch(0.14 0.025 285 / 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(0.55 0.22 290 / 0.15);
+  }
+}
