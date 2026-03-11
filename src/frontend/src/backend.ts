@@ -82,7 +82,7 @@ const idlFactory = ({ IDL: I }: { IDL: typeof IDL }) => {
     category: I.Text,
     youtubeUrl: I.Text,
     thumbnailUrl: I.Text,
-    dateAdded: I.Nat,
+    dateAdded: I.Nat64,
   });
   const Role = I.Variant({
     admin: I.Null,
