@@ -36,7 +36,7 @@ import {
 import {
   Edit2,
   Loader2,
-  LogIn,
+  Lock,
   LogOut,
   Plus,
   Shield,
@@ -46,15 +46,28 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import type { VideoEntry } from "../backend";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import {
   useAddVideo,
   useAllCategories,
   useAllVideos,
   useDeleteVideo,
-  useIsAdmin,
   useUpdateVideo,
 } from "../hooks/useQueries";
+
+const ADMIN_PASSCODE = "238929";
+const SESSION_KEY = "vmv_admin_auth";
+
+function isAuthenticated(): boolean {
+  return sessionStorage.getItem(SESSION_KEY) === "1";
+}
+
+function setAuthenticated(value: boolean) {
+  if (value) {
+    sessionStorage.setItem(SESSION_KEY, "1");
+  } else {
+    sessionStorage.removeItem(SESSION_KEY);
+  }
+}
 
 const DEFAULT_CATEGORIES = [
   "80's Music",
@@ -92,8 +105,10 @@ const emptyForm: VideoFormData = {
 };
 
 export default function AdminPage() {
-  const { identity, login, clear, isLoggingIn } = useInternetIdentity();
-  const { data: isAdmin, isLoading: adminLoading } = useIsAdmin();
+  const [authed, setAuthed] = useState(isAuthenticated);
+  const [passcode, setPasscode] = useState("");
+  const [passcodeError, setPasscodeError] = useState(false);
+
   const { data: videos, isLoading: videosLoading } = useAllVideos();
   const { data: categories } = useAllCategories();
   const addVideo = useAddVideo();
@@ -108,6 +123,23 @@ export default function AdminPage() {
   const allCategories = [
     ...new Set([...DEFAULT_CATEGORIES, ...(categories ?? [])]),
   ].sort();
+
+  const handlePasscodeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passcode === ADMIN_PASSCODE) {
+      setAuthenticated(true);
+      setAuthed(true);
+      setPasscodeError(false);
+    } else {
+      setPasscodeError(true);
+      setPasscode("");
+    }
+  };
+
+  const handleLogout = () => {
+    setAuthenticated(false);
+    setAuthed(false);
+  };
 
   const handleOpenAdd = () => {
     setForm(emptyForm);
@@ -169,70 +201,56 @@ export default function AdminPage() {
     }
   };
 
-  // Not logged in
-  if (!identity) {
+  // Passcode login screen
+  if (!authed) {
     return (
       <div className="container mx-auto px-4 py-16">
-        <div className="max-w-md mx-auto text-center space-y-6">
-          <Shield className="w-16 h-16 mx-auto text-primary/50" />
-          <h1 className="font-display text-3xl font-bold text-gradient">
-            Admin Access
-          </h1>
-          <p className="text-muted-foreground">
-            This area is restricted to administrators. Please login to continue.
-          </p>
-          <Button
-            data-ocid="admin.login_button"
-            onClick={login}
-            disabled={isLoggingIn}
-            className="gap-2 bg-primary hover:bg-primary/80 vault-glow"
-          >
-            {isLoggingIn ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <LogIn className="w-4 h-4" />
-            )}
-            {isLoggingIn ? "Connecting..." : "Login with Internet Identity"}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  // Checking admin status
-  if (adminLoading) {
-    return (
-      <div
-        className="container mx-auto px-4 py-16 text-center"
-        data-ocid="admin.loading_state"
-      >
-        <Loader2 className="w-10 h-10 mx-auto animate-spin text-primary" />
-        <p className="text-muted-foreground mt-4">Verifying access...</p>
-      </div>
-    );
-  }
-
-  // Not admin
-  if (!isAdmin) {
-    return (
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-md mx-auto text-center space-y-6">
-          <Shield className="w-16 h-16 mx-auto text-destructive/60" />
-          <h1 className="font-display text-3xl font-bold">Access Denied</h1>
-          <p className="text-muted-foreground">
-            Your account does not have admin privileges.
-          </p>
-          <p className="text-xs text-muted-foreground font-mono bg-secondary px-3 py-2 rounded">
-            {identity.getPrincipal().toString()}
-          </p>
-          <Button
-            data-ocid="admin.logout_button"
-            variant="outline"
-            onClick={clear}
-            className="gap-2"
-          >
-            <LogOut className="w-4 h-4" /> Logout
-          </Button>
+        <div className="max-w-sm mx-auto space-y-8">
+          <div className="text-center space-y-3">
+            <Shield className="w-14 h-14 mx-auto text-primary/60" />
+            <h1 className="font-display text-3xl font-bold text-gradient">
+              Admin Access
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              Enter your passcode to continue.
+            </p>
+          </div>
+          <form onSubmit={handlePasscodeSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="passcode">Passcode</Label>
+              <Input
+                id="passcode"
+                data-ocid="admin.passcode_input"
+                type="password"
+                value={passcode}
+                onChange={(e) => {
+                  setPasscode(e.target.value);
+                  setPasscodeError(false);
+                }}
+                placeholder="Enter passcode"
+                className={`bg-secondary/50 text-center tracking-widest text-lg ${
+                  passcodeError ? "border-destructive" : ""
+                }`}
+                autoFocus
+              />
+              {passcodeError && (
+                <p
+                  className="text-destructive text-sm text-center"
+                  data-ocid="admin.error_state"
+                >
+                  Incorrect passcode. Please try again.
+                </p>
+              )}
+            </div>
+            <Button
+              data-ocid="admin.submit_button"
+              type="submit"
+              className="w-full gap-2 bg-primary hover:bg-primary/80 vault-glow"
+            >
+              <Lock className="w-4 h-4" />
+              Unlock Admin Panel
+            </Button>
+          </form>
         </div>
       </div>
     );
@@ -246,9 +264,6 @@ export default function AdminPage() {
           <h1 className="font-display text-3xl font-bold text-gradient">
             Admin Panel
           </h1>
-          <p className="text-muted-foreground text-sm mt-1 font-mono">
-            {identity.getPrincipal().toString().slice(0, 20)}...
-          </p>
         </div>
         <div className="flex gap-3">
           <Button
@@ -261,10 +276,10 @@ export default function AdminPage() {
           <Button
             data-ocid="admin.logout_button"
             variant="outline"
-            onClick={clear}
+            onClick={handleLogout}
             className="gap-2"
           >
-            <LogOut className="w-4 h-4" /> Logout
+            <LogOut className="w-4 h-4" /> Lock
           </Button>
         </div>
       </div>
