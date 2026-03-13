@@ -7,7 +7,6 @@ import Iter "mo:core/Iter";
 
 actor {
   // === Authorization ===
-  // Retained for upgrade compatibility (previously used for II-based admin check)
   let OWNER_PRINCIPAL : Text = "csuk4-6hjxz-lk7tk-4olsv-2msx7-5ezeo-q35jl-q6p43-57hil-xgt7l-3ae";
   transient let accessControlState : AccessControl.AccessControlState = AccessControl.initState();
 
@@ -43,9 +42,9 @@ actor {
     dateAdded : Nat64;
   };
 
-  // === State ===
-  transient var videos : [VideoEntry] = [];
-  transient var nextId : Nat = 0;
+  // === State (stable - persists across upgrades) ===
+  stable var videos : [VideoEntry] = [];
+  stable var nextId : Nat = 0;
 
   // === Helper: extract YouTube video ID from URL ===
   func extractVideoId(url : Text) : Text {
@@ -95,7 +94,7 @@ actor {
     "https://img.youtube.com/vi/" # videoId # "/hqdefault.jpg";
   };
 
-  // === Seed Data ===
+  // === Seed Data (only runs on first initialization) ===
   func seedVideos() {
     type SeedEntry = (Text, Text, Text, Text);
     let seed : [SeedEntry] = [
@@ -141,7 +140,10 @@ actor {
     nextId := idx;
   };
 
-  seedVideos();
+  // Only seed on first initialization (empty state)
+  if (videos.size() == 0) {
+    seedVideos();
+  };
 
   func compareByDate(a : VideoEntry, b : VideoEntry) : { #less; #equal; #greater } {
     if (a.dateAdded > b.dateAdded) #less
