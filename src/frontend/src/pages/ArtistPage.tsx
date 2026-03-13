@@ -32,10 +32,10 @@ export default function ArtistPage({ name }: ArtistPageProps) {
         </Button>
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-            <User2 className="w-8 h-8 text-primary" />
+            <User2 className="w-8 h-8 text-primary neon-pulse-icon" />
           </div>
           <div>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-gradient">
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-gradient neon-pulse-text">
               {name}
             </h1>
             <p className="text-muted-foreground text-sm mt-1">

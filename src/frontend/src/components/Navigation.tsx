@@ -32,11 +32,11 @@ export default function Navigation({ currentPage }: NavigationProps) {
             onClick={() => navigate("/")}
             className="flex items-center gap-2 flex-shrink-0 group"
           >
-            <Music2 className="w-6 h-6 text-primary group-hover:text-accent transition-colors" />
-            <span className="font-display font-bold text-lg text-gradient hidden sm:block">
+            <Music2 className="w-6 h-6 text-primary neon-pulse-icon" />
+            <span className="font-display font-bold text-lg text-gradient neon-pulse-text hidden sm:block">
               Voldermort Music Vault
             </span>
-            <span className="font-display font-bold text-lg text-gradient sm:hidden">
+            <span className="font-display font-bold text-lg text-gradient neon-pulse-text sm:hidden">
               VMV
             </span>
           </button>

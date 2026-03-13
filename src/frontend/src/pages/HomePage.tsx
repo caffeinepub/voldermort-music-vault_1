@@ -88,9 +88,9 @@ export default function HomePage() {
         className="text-center py-12 space-y-6"
       >
         <div className="flex justify-center mb-4">
-          <Music2 className="w-12 h-12 text-primary animate-pulse-glow" />
+          <Music2 className="w-12 h-12 text-primary neon-pulse-icon" />
         </div>
-        <h1 className="font-display text-4xl md:text-6xl font-bold text-gradient leading-tight">
+        <h1 className="font-display text-4xl md:text-6xl font-bold text-gradient leading-tight neon-pulse-text">
           Voldermort Music Vault
         </h1>
         <p className="text-muted-foreground text-lg max-w-xl mx-auto">
@@ -129,7 +129,7 @@ export default function HomePage() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="font-display text-2xl font-bold mb-6 text-gradient"
+          className="font-display text-2xl font-bold mb-6 text-gradient neon-pulse-text"
         >
           Browse by Genre
         </motion.h2>
@@ -184,7 +184,7 @@ export default function HomePage() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="font-display text-2xl font-bold mb-6 text-gradient"
+          className="font-display text-2xl font-bold mb-6 text-gradient neon-pulse-text-pink"
         >
           Featured Tracks
         </motion.h2>

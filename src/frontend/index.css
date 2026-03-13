@@ -68,17 +68,92 @@
     @apply bg-background text-foreground font-body;
     background-image:
       radial-gradient(ellipse at 20% 0%, oklch(0.18 0.06 290 / 0.4) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 100%, oklch(0.15 0.05 310 / 0.3) 0%, transparent 50%);
+      radial-gradient(ellipse at 80% 100%, oklch(0.15 0.05 310 / 0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, oklch(0.14 0.04 195 / 0.06) 0%, transparent 70%),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 79px,
+        oklch(0.55 0.22 290 / 0.015) 79px,
+        oklch(0.55 0.22 290 / 0.015) 80px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 79px,
+        oklch(0.55 0.22 290 / 0.015) 79px,
+        oklch(0.55 0.22 290 / 0.015) 80px
+      );
     min-height: 100vh;
+  }
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 8px oklch(0.85 0.18 195 / 0.8),
+      0 0 20px oklch(0.85 0.18 195 / 0.5),
+      0 0 40px oklch(0.55 0.22 290 / 0.4),
+      0 0 80px oklch(0.55 0.22 290 / 0.2);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 4px oklch(0.85 0.18 195 / 0.5),
+      0 0 10px oklch(0.85 0.18 195 / 0.3),
+      0 0 20px oklch(0.55 0.22 290 / 0.25),
+      0 0 40px oklch(0.55 0.22 290 / 0.1);
+    opacity: 0.85;
+  }
+}
+
+@keyframes neon-pulse-pink {
+  0%, 100% {
+    text-shadow:
+      0 0 8px oklch(0.82 0.22 335 / 0.8),
+      0 0 20px oklch(0.82 0.22 335 / 0.5),
+      0 0 40px oklch(0.55 0.22 290 / 0.4),
+      0 0 80px oklch(0.55 0.22 290 / 0.2);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 4px oklch(0.82 0.22 335 / 0.5),
+      0 0 10px oklch(0.82 0.22 335 / 0.3),
+      0 0 20px oklch(0.55 0.22 290 / 0.25),
+      0 0 40px oklch(0.55 0.22 290 / 0.1);
+    opacity: 0.85;
+  }
+}
+
+@keyframes neon-icon-pulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 8px oklch(0.85 0.18 195))
+      drop-shadow(0 0 20px oklch(0.55 0.22 290))
+      drop-shadow(0 0 4px oklch(0.82 0.22 335 / 0.5));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 4px oklch(0.85 0.18 195 / 0.6))
+      drop-shadow(0 0 8px oklch(0.55 0.22 290 / 0.7))
+      drop-shadow(0 0 2px oklch(0.82 0.22 335 / 0.3));
   }
 }
 
 @layer utilities {
   .vault-glow {
-    box-shadow: 0 0 20px oklch(0.55 0.22 290 / 0.25), 0 0 60px oklch(0.55 0.22 290 / 0.1);
+    box-shadow:
+      0 0 20px oklch(0.55 0.22 290 / 0.25),
+      0 0 60px oklch(0.55 0.22 290 / 0.1),
+      0 0 12px oklch(0.85 0.18 195 / 0.08);
   }
   .vault-glow-hover:hover {
-    box-shadow: 0 0 30px oklch(0.55 0.22 290 / 0.45), 0 0 80px oklch(0.55 0.22 290 / 0.2);
+    box-shadow:
+      0 0 30px oklch(0.55 0.22 290 / 0.45),
+      0 0 80px oklch(0.55 0.22 290 / 0.2),
+      0 0 20px oklch(0.85 0.18 195 / 0.15),
+      0 0 6px oklch(0.82 0.22 335 / 0.1);
   }
   .text-gradient {
     background: linear-gradient(135deg, oklch(0.75 0.18 290), oklch(0.72 0.22 310), oklch(0.68 0.20 330));
@@ -90,5 +165,22 @@
     background: oklch(0.14 0.025 285 / 0.7);
     backdrop-filter: blur(12px);
     border: 1px solid oklch(0.55 0.22 290 / 0.15);
+  }
+  .neon-pulse-text {
+    animation: neon-pulse 3s ease-in-out infinite;
+  }
+  .neon-pulse-text-pink {
+    animation: neon-pulse-pink 3s ease-in-out infinite;
+  }
+  .neon-pulse-icon {
+    animation: neon-icon-pulse 3s ease-in-out infinite;
+  }
+  .neon-glow-card:hover {
+    box-shadow:
+      0 0 25px oklch(0.85 0.18 195 / 0.3),
+      0 0 50px oklch(0.55 0.22 290 / 0.35),
+      0 0 10px oklch(0.82 0.22 335 / 0.15),
+      0 8px 32px oklch(0.09 0.018 285 / 0.6);
+    border-color: oklch(0.85 0.18 195 / 0.35);
   }
 }

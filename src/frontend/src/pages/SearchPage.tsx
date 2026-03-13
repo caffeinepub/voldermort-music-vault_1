@@ -45,7 +45,7 @@ export default function SearchPage({ query }: SearchPageProps) {
           <ChevronLeft className="w-4 h-4" /> Back to Home
         </Button>
 
-        <h1 className="font-display text-3xl font-bold text-gradient">
+        <h1 className="font-display text-3xl font-bold text-gradient neon-pulse-text">
           Search Results
         </h1>
 

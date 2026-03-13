@@ -24,7 +24,7 @@ export default function VideoCard({ video, index = 0 }: VideoCardProps) {
   return (
     <div
       data-ocid={`video.item.${index + 1}`}
-      className="group relative bg-card rounded-lg overflow-hidden transition-all duration-300 hover:scale-[1.02] vault-glow-hover border border-border/50 hover:border-primary/40"
+      className="group relative bg-card rounded-lg overflow-hidden transition-all duration-300 hover:scale-[1.02] vault-glow-hover neon-glow-card border border-border/50 hover:border-primary/40"
     >
       {/* Thumbnail — full clickable link to YouTube */}
       <a

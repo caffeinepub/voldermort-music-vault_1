@@ -55,7 +55,7 @@ export default function CategoryPage({ name }: CategoryPageProps) {
         <div className="flex items-center gap-4">
           <span className="text-5xl">{CATEGORY_ICONS[name] ?? "🎵"}</span>
           <div>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-gradient">
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-gradient neon-pulse-text">
               {name}
             </h1>
             <p className="text-muted-foreground text-sm mt-1">
